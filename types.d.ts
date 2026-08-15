@@ -7,7 +7,7 @@ interface Book {
   totalCopies: number;
   availableCopies: number;
   description: string;
-  color: string;
+  coverColor: string;
   coverUrl: string;
   videoUrl: string;
   summary: string;

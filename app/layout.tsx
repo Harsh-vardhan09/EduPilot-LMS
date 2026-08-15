@@ -2,6 +2,8 @@ import type { Metadata } from 'next';
 import localFont from 'next/font/local';
 import './globals.css';
 import { cn } from '@/lib/utils';
+import { Toaster } from '@/components/ui/toast';
+
 
 const ibmPlexSans = localFont({
   src: [
@@ -40,7 +42,9 @@ export default function RootLayout({ children }: LayoutProps<'/'>) {
         'font-sans',
       )}
     >
-      <body className="min-h-full flex flex-col">{children}</body>
+      <body className="min-h-full flex flex-col">{children}
+        <Toaster/>
+      </body>
     </html>
   );
 }
