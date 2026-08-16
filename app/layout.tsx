@@ -3,7 +3,9 @@ import localFont from 'next/font/local';
 import './globals.css';
 import { cn } from '@/lib/utils';
 import { Toaster } from '@/components/ui/toast';
-
+import { SessionProvider } from 'next-auth/react'
+import { auth } from '@/auth';
+import { redirect } from 'next/navigation';
 
 const ibmPlexSans = localFont({
   src: [
@@ -30,7 +32,10 @@ export const metadata: Metadata = {
   description: 'EduPilot is a book LMS for university',
 };
 
-export default function RootLayout({ children }: LayoutProps<'/'>) {
+export default async function RootLayout({ children }: LayoutProps<'/'>) {
+  const session=await auth();
+
+ 
   return (
     <html
       lang="en"
@@ -39,12 +44,15 @@ export default function RootLayout({ children }: LayoutProps<'/'>) {
         'antialiased',
         ibmPlexSans.className,
         bebasNeue.variable,
-        'font-sans',
+        'font-sans'
       )}
     >
-      <body className="min-h-full flex flex-col">{children}
-        <Toaster/>
-      </body>
+      <SessionProvider session={session}>
+        <body className="min-h-full flex flex-col">
+          {children}
+          <Toaster />
+        </body>
+      </SessionProvider>
     </html>
   );
 }

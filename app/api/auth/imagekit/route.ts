@@ -3,7 +3,6 @@ import { getUploadAuthParams } from '@imagekit/next/server';
 import { NextResponse } from 'next/server';
 
 export async function GET() {
-    console.log("public key "+config.env.imagekit.publicKey);
     
   try {
     const { token, expire, signature } = getUploadAuthParams({

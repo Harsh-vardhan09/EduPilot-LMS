@@ -11,6 +11,7 @@ import {
 } from '@imagekit/next';
 import { useRef, useState } from 'react';
 import { toast } from './ui/toast';
+import NextImage from "next/image";
 
 const authenticator = async () => {
   try {
@@ -112,8 +113,8 @@ const ImageUpload = ({
         }}
         className="upload-btn"
       >
-        <Image
-          src={'/icons/upload.svg'}
+        <NextImage
+          src='/icons/upload.svg'
           alt="upload-icon"
           width={20}
           height={20}
