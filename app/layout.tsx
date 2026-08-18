@@ -5,14 +5,13 @@ import { cn } from '@/lib/utils';
 import { Toaster } from '@/components/ui/toast';
 import { SessionProvider } from 'next-auth/react'
 import { auth } from '@/auth';
-import { redirect } from 'next/navigation';
 
 const ibmPlexSans = localFont({
   src: [
     { path: '/fonts/IBMPlexSans-Regular.ttf', weight: '400', style: 'normal' },
     { path: '/fonts/IBMPlexSans-Medium.ttf', weight: '500', style: 'normal' },
     {
-      path: '/fonts/IBMPlexSans-semiBold.ttf',
+      path: '/fonts/IBMPlexSans-SemiBold.ttf',
       weight: '600',
       style: 'normal',
     },
