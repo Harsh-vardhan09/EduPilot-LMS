@@ -19,7 +19,7 @@ const getUserState = async (email: string): Promise<UserState> => {
   const user = await db
     .select()
     .from(users)
-    .where(eq(users.email, session?.user?.email))
+    .where(eq(users.email, email))
     .limit(1);
   if (user.length === 0) return 'non-active';
 
