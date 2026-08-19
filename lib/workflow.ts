@@ -1,6 +1,5 @@
 import { Client as WorkflowClient, WorkflowContext } from '@upstash/workflow';
 import config from './config';
-import { serve } from '@upstash/workflow/nextjs';
 
 export const workflowClient = new WorkflowClient({
   baseUrl: config.env.upstash.qstashUrl,
@@ -19,7 +18,7 @@ export const sendEmail = async (
   await context.api.resend.call('Call Resend', {
     token: process.env.RESEND_TOKEN!,
     body: {
-      from: 'EduPilor <onboarding@resend.dev>',
+      from: 'EduPilot <onboarding@resend.dev>',
       to: [email],
       subject,
       html: message,

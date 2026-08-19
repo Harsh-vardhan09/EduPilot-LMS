@@ -39,12 +39,10 @@ export const { POST } = serve<InitialData>(async (context) => {
 
   //welcome email
 
-  await context.run('new-signup', async () => {
-    await sendEmail({
-      email,
-      subject: 'welcome to the platform',
-      message: `welcome ${fullName}`,
-    });
+  await sendEmail(context, {
+    email,
+    subject: 'welcome to the platform',
+    message: `welcome ${fullName}`,
   });
 
   await context.sleep('wait-for-3-days', THREE_DAYS_IN_MS);
@@ -55,20 +53,16 @@ export const { POST } = serve<InitialData>(async (context) => {
     });
 
     if (state === 'non-active') {
-      await context.run('send-email-non-active', async () => {
-        await sendEmail({
-          email,
-          subject: 'are you still there',
-          message: `Hey ${fullName},we miss you`,
-        });
+      await sendEmail(context, {
+        email,
+        subject: 'are you still there',
+        message: `Hey ${fullName},we miss you`,
       });
     } else if (state === 'active') {
-      await context.run('send-email-active', async () => {
-        await sendEmail({
-          email,
-          subject: 'Welcome back',
-          message: `Good to see you back ${fullName}`,
-        });
+      await sendEmail(context, {
+        email,
+        subject: 'Welcome back',
+        message: `Good to see you back ${fullName}`,
       });
     }
 
