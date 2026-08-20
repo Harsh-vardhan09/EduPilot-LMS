@@ -17,7 +17,7 @@ import { Field, FieldError, FieldLabel } from '@/components/ui/field';
 import { Input } from '@/components/ui/input';
 import Link from 'next/link';
 import { FIELD_NAMES, FIELD_TYPES } from '@/contants';
-import ImageUpload from './ImageUpload';
+import ImageUpload from './FileUpload';
 import { useRouter } from 'next/navigation';
 import { toast } from './ui/toast';
 

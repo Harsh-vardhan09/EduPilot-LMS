@@ -81,13 +81,7 @@
 
   /* Book Form */
 
-  .book-form_input {
-    @apply min-h-14 border border-gray-100 bg-light-600 p-4 text-base font-semibold placeholder:font-normal placeholder:text-slate-500  ;
-  }
 
-  .book-form_btn {
-    @apply min-h-14 w-full bg-primary-admin hover:bg-primary-admin/95  ;
-  }
 
   /* Home Page */
 
@@ -251,3 +245,9 @@
     @apply w-full line-clamp-1 break-words text-sm text-light-500;
   }
 }
+
+/* Unlayered: beats the `utilities` layer so it can override shadcn's bg-transparent on <Input> */
+.book-form_input {
+  @apply min-h-14 border border-gray-100 bg-white p-4 text-base font-semibold placeholder:font-normal placeholder:text-slate-500;
+}
+

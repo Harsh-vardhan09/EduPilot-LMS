@@ -1,8 +1,5 @@
-
 const page = () => {
-  return (
-    <div>page</div>
-  )
-}
+  return <div>Admin dashboard</div>;
+};
 
-export default page
+export default page;

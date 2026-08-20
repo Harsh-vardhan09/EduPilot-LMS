@@ -13,6 +13,16 @@ import { useRef, useState } from 'react';
 import { toast } from './ui/toast';
 import NextImage from "next/image";
 
+
+interface Props{
+  type:'image'|'file';
+  accept:string;
+  folder:string;
+  placeholder:string;
+  variant:'dark'|'light';
+  onFileChange:(filePath:string)=>void;
+}
+
 const authenticator = async () => {
   try {
     const response = await fetch(`${config.env.apiEndpoint}/api/auth/imagekit`);
@@ -33,11 +43,9 @@ const authenticator = async () => {
   }
 };
 
-const ImageUpload = ({
+const FileUpload = ({
   onFileChange,
-}: {
-  onFileChange: (filePath: string) => void;
-}) => {
+}: Props) => {
   const ikUploadRef = useRef<HTMLInputElement>(null);
   const [uploadedFile, setUploadedFile] = useState<{ filePath: string } | null>(
     null
@@ -139,4 +147,4 @@ const ImageUpload = ({
   );
 };
 
-export default ImageUpload;
+export default FileUpload;
