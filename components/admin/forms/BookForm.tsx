@@ -10,6 +10,10 @@ import { useRouter } from 'next/navigation';
 import { bookSchema } from '@/lib/validation';
 import { Textarea } from '@/components/ui/textarea';
 import { Button } from '@/components/ui/button';
+import FileUpload from '@/components/FileUpload';
+import { ColorPicker } from '../ColorPicker';
+import { createBook } from '@/lib/admin/actions/book';
+import { toast } from '@/components/ui/toast';
 
 interface Props extends Partial<Book> {
   type?: 'create' | 'update';
@@ -23,9 +27,9 @@ const BookForm = ({ type, ...book }: Props) => {
     handleSubmit,
     setError,
     setValue,
+    watch,
     formState: { errors, isSubmitting },
-  } = useForm<z.infer<typeof bookSchema>>({
-    // ponytail: cast needed — RHF can't prove a generic ZodType<T> resolves to T.
+  } = useForm<z.input<typeof bookSchema>, unknown, z.output<typeof bookSchema>>({
     resolver: zodResolver(bookSchema),
     defaultValues: {
       title: '',
@@ -41,10 +45,30 @@ const BookForm = ({ type, ...book }: Props) => {
     },
   });
 
-  const onSubmit = async (values: z.infer<typeof bookSchema>) => {};
+  const onSubmit = async (values: z.output<typeof bookSchema>) => {
+    console.log(values);
+    
+   const result=await createBook(values);
+
+   if(result.success){
+    toast.add({
+      title:'success',
+      description:"Book created successfully"
+    })
+
+    router.push(`/admin/books/${result.data.id}`)
+   }else{
+    toast.add({
+      title:"error",
+      description:result.message,
+    })
+   }
+  };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+    <form onSubmit={handleSubmit(onSubmit, (errors) => {
+      console.log('VALIDATION ERRORS:', errors);
+    })} className="space-y-6">
       <Field className="flex flex-col gap-1">
         <FieldLabel
           htmlFor="title"
@@ -135,6 +159,14 @@ const BookForm = ({ type, ...book }: Props) => {
         >
           Book Image
         </FieldLabel>
+
+        <FileUpload
+          type="image"
+          placeholder="upload a book cover"
+          folder="books/covers"
+          variant="light"
+          onFileChange={(filePath) => setValue('coverUrl', filePath)}
+        />
       </Field>
 
       <Field className="flex flex-col gap-1">
@@ -144,6 +176,10 @@ const BookForm = ({ type, ...book }: Props) => {
         >
           Primary Color
         </FieldLabel>
+        <ColorPicker
+          value={watch('coverColor')}
+          onPickerChange={(color) => setValue('coverColor', color)}
+        />
       </Field>
 
       <Field className="flex flex-col gap-1">
@@ -167,7 +203,13 @@ const BookForm = ({ type, ...book }: Props) => {
           Book Video
         </FieldLabel>
 
-        {/* file upload */}
+        <FileUpload
+          type="video"
+          placeholder="upload a book cover"
+          folder="books/video"
+          variant="light"
+          onFileChange={(filePath) => setValue('videoUrl', filePath)}
+        />
       </Field>
       <Field className="flex flex-col gap-1">
         <FieldLabel
@@ -183,7 +225,7 @@ const BookForm = ({ type, ...book }: Props) => {
         />
       </Field>
 
-      <Button type='submit' className="book-form_btn text-white">
+      <Button type="submit" className="book-form_btn text-white">
         Add Book to Library
       </Button>
       <FieldError errors={[errors.root]} />

@@ -8,19 +8,19 @@ import {
   ImageKitServerError,
   ImageKitUploadNetworkError,
   Image,
+  Video,
 } from '@imagekit/next';
 import { useRef, useState } from 'react';
 import { toast } from './ui/toast';
-import NextImage from "next/image";
+import NextImage from 'next/image';
+import { cn } from '@/lib/utils';
 
-
-interface Props{
-  type:'image'|'file';
-  accept:string;
-  folder:string;
-  placeholder:string;
-  variant:'dark'|'light';
-  onFileChange:(filePath:string)=>void;
+interface Props {
+  type: 'image' | 'file'|'video';
+  folder: string;
+  placeholder: string;
+  variant: 'dark' | 'light';
+  onFileChange: (filePath: string) => void;
 }
 
 const authenticator = async () => {
@@ -44,13 +44,27 @@ const authenticator = async () => {
 };
 
 const FileUpload = ({
+  type,
+  placeholder,
+  folder,
+  variant,
   onFileChange,
 }: Props) => {
   const ikUploadRef = useRef<HTMLInputElement>(null);
   const [uploadedFile, setUploadedFile] = useState<{ filePath: string } | null>(
     null
   );
+  const [progress, setProgress] = useState(0);
   const abortController = new AbortController();
+
+  const styles = {
+    button:
+      variant === 'dark'
+        ? 'bg-dark-300'
+        : 'bg-light-600 border-gray-100 border',
+    placeholder: variant === 'dark' ? 'text-light-100' : 'text-slate-500',
+    text: variant === 'dark' ? 'text-light-100' : 'text-dark-400',
+  };
 
   const handleUpload = async () => {
     const fileInput = ikUploadRef.current;
@@ -77,8 +91,13 @@ const FileUpload = ({
         signature,
         publicKey,
         file,
+        folder:folder,
         fileName: 'test-upload.png',
-
+        useUniqueFileName: true,
+        onProgress: ({ loaded, total }) => {
+          const percent = Math.round((loaded / total) * 100);
+          setProgress(percent);
+        },
         abortSignal: abortController.signal,
       });
       setUploadedFile({
@@ -87,7 +106,7 @@ const FileUpload = ({
       onFileChange(uploadResponse.filePath!);
 
       toast.add({
-        title: 'image uploaded succesfully',
+        title: `${type} uploaded succesfully`,
         description: `${uploadResponse.filePath} successfull`,
       });
     } catch (error) {
@@ -105,6 +124,7 @@ const FileUpload = ({
     }
   };
 
+
   return (
     <>
       <input
@@ -119,29 +139,42 @@ const FileUpload = ({
           e.preventDefault();
           ikUploadRef.current?.click();
         }}
-        className="upload-btn"
+        className={cn('upload-btn',styles.button)}
       >
         <NextImage
-          src='/icons/upload.svg'
+          src="/icons/upload.svg"
           alt="upload-icon"
           width={20}
           height={20}
           className="object-contain"
         />
-        <p className="text-base text-light-100">Upload a file</p>
+        <p className={cn("text-base ", styles.placeholder)}>{placeholder}</p>
+  
+        
         {uploadedFile && (
-          <p className="upload-filename">{uploadedFile.filePath}</p>
+          <p className={cn("text-base text-light-100",styles.text)}>{uploadedFile.filePath}</p>
         )}
       </button>
-
+        {progress>0 && progress!=100 && (
+          <div className='w-full rounded-full bg-green-200'>
+            <div className='progress' style={{width:`${progress}%`}}>
+              {progress}%
+            </div>
+          </div>
+        )}
       {uploadedFile && (
-        <Image
-          urlEndpoint={config.env.imagekit.urlEndpoint!}
-          src={uploadedFile.filePath}
-          alt="Uploaded profile image"
-          width={500}
-          height={500}
-        />
+        (type==="image")?(
+          <Image
+            urlEndpoint={config.env.imagekit.urlEndpoint!}
+            src={uploadedFile.filePath}
+            alt="Uploaded profile image"
+            width={500}
+            height={500}
+          />
+
+        ):type==='video'?(
+          <Video urlEndpoint={config.env.imagekit.urlEndpoint!} src={uploadedFile.filePath} controls={true} height={100} width={100}/>
+        ):null
       )}
     </>
   );
