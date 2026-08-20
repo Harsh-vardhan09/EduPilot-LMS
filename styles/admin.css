@@ -2,23 +2,36 @@
 
 @theme {
 
-  --color-primary-admin: #your-primary-color;
+  --color-primary: #e7c9a5;
+  --color-primary-admin: #25388c;
 
-  --color-light-300: #your-light-300;
-  --color-light-400: #your-light-400;
-  --color-light-500: #your-light-500;
-  --color-light-600: #your-light-600;
-  --color-light-800: #your-light-800;
+  /* Green */
+  --color-green: #027a48;
+  --color-green-100: #ecfdf3;
+  --color-green-400: #4c7b62;
+  --color-green-500: #2cc171;
+  --color-green-800: #027a48;
 
-  --color-dark-200: #your-dark-200;
-  --color-dark-400: #your-dark-400;
+  /* Red */
+  --color-red: #ef3a4b;
+  --color-red-400: #f46f70;
+  --color-red-500: #e27233;
+  --color-red-800: #ef3a4b;
 
-  --color-green-100: #your-green-100;
-  --color-green-800: #your-green-800;
+  /* Blue */
+  --color-blue-100: #0089f1;
 
-  --color-red-100: #your-red-100;
-  --color-red-700: #your-red-700;
-  --color-red-800: #your-red-800;
+  /* Light */
+  --color-light-300: #f8f8ff;
+  --color-light-400: #edf1f1;
+  --color-light-500: #8d8d8d;
+  --color-light-600: #f9fafb;
+  --color-light-700: #e2e8f0;
+  --color-light-800: #f8fafc;
+
+  /* Dark */
+  --color-dark-200: #3a354e;
+  --color-dark-400: #1e293b;
 
   --font-ibm-plex-sans: "IBM Plex Sans", sans-serif;
 
