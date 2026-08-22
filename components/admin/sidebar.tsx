@@ -54,7 +54,7 @@ const Sidebar = ({session}:{session:Session}) => {
       <div className='user'>
           <Avatar>
             <AvatarFallback className={'bg-amber-100'}>
-                {getInitials(session?.user?.name)}
+                {getInitials(session?.user?.name!)}
             </AvatarFallback> 
           </Avatar>
           <div className='flex flex-col max-md:hidden'>
