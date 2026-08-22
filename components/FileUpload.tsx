@@ -16,7 +16,7 @@ import NextImage from 'next/image';
 import { cn } from '@/lib/utils';
 
 interface Props {
-  type: 'image' | 'file'|'video';
+  type: 'image' | 'file' | 'video';
   folder: string;
   placeholder: string;
   variant: 'dark' | 'light';
@@ -91,8 +91,8 @@ const FileUpload = ({
         signature,
         publicKey,
         file,
-        folder:folder,
-        fileName: 'test-upload.png',
+        folder: folder,
+        fileName: 'images',
         useUniqueFileName: true,
         onProgress: ({ loaded, total }) => {
           const percent = Math.round((loaded / total) * 100);
@@ -100,10 +100,13 @@ const FileUpload = ({
         },
         abortSignal: abortController.signal,
       });
+      console.log(uploadResponse.url);
+      
       setUploadedFile({
         filePath: uploadResponse.filePath!,
       });
-      onFileChange(uploadResponse.filePath!);
+      
+      onFileChange(uploadResponse.url!);
 
       toast.add({
         title: `${type} uploaded succesfully`,
@@ -124,7 +127,6 @@ const FileUpload = ({
     }
   };
 
-
   return (
     <>
       <input
@@ -139,7 +141,7 @@ const FileUpload = ({
           e.preventDefault();
           ikUploadRef.current?.click();
         }}
-        className={cn('upload-btn',styles.button)}
+        className={cn('upload-btn', styles.button)}
       >
         <NextImage
           src="/icons/upload.svg"
@@ -148,22 +150,23 @@ const FileUpload = ({
           height={20}
           className="object-contain"
         />
-        <p className={cn("text-base ", styles.placeholder)}>{placeholder}</p>
-  
-        
+        <p className={cn('text-base ', styles.placeholder)}>{placeholder}</p>
+
         {uploadedFile && (
-          <p className={cn("text-base text-light-100",styles.text)}>{uploadedFile.filePath}</p>
+          <p className={cn('text-base text-light-100', styles.text)}>
+            {uploadedFile.filePath}
+          </p>
         )}
       </button>
-        {progress>0 && progress!=100 && (
-          <div className='w-full rounded-full bg-green-200'>
-            <div className='progress' style={{width:`${progress}%`}}>
-              {progress}%
-            </div>
+      {progress > 0 && progress != 100 && (
+        <div className="w-full rounded-full bg-green-200">
+          <div className="progress" style={{ width: `${progress}%` }}>
+            {progress}%
           </div>
-        )}
-      {uploadedFile && (
-        (type==="image")?(
+        </div>
+      )}
+      {uploadedFile &&
+        (type === 'image' ? (
           <Image
             urlEndpoint={config.env.imagekit.urlEndpoint!}
             src={uploadedFile.filePath}
@@ -171,11 +174,15 @@ const FileUpload = ({
             width={500}
             height={500}
           />
-
-        ):type==='video'?(
-          <Video urlEndpoint={config.env.imagekit.urlEndpoint!} src={uploadedFile.filePath} controls={true} height={100} width={100}/>
-        ):null
-      )}
+        ) : type === 'video' ? (
+          <Video
+            urlEndpoint={config.env.imagekit.urlEndpoint!}
+            src={uploadedFile.filePath}
+            controls={true}
+            height={100}
+            width={100}
+          />
+        ) : null)}
     </>
   );
 };
